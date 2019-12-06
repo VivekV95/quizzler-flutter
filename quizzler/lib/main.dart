@@ -1,6 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:quizzler/question.dart';
+import 'package:quizzler/quiz_brain.dart';
+
+QuizBrain quizBrain = new QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -29,32 +33,6 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
-  List<String> questions = [
-    'You can lead a cow downstairs but not updtairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
-  ];
-
-  List<bool> answers = [false, true, true];
-
-  int currentQuestion = 0;
-
-  void cycleQuestion() {
-    setState(() {
-      if (currentQuestion == questions.length - 1)
-        currentQuestion = 0;
-      else
-        currentQuestion++;
-    });
-  }
-
-  bool checkAnswer(bool answer) {
-    if (answers[currentQuestion] == answer)
-      return true;
-    else
-      return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,7 +45,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[currentQuestion],
+                quizBrain.getQuestion(quizBrain.currentQuestion),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -91,8 +69,10 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                checkAnswer(true);
-                cycleQuestion();
+                setState(() {
+                  print(quizBrain.checkAnswer(true));
+                  quizBrain.cycleQuestion();
+                });
               },
             ),
           ),
@@ -110,8 +90,10 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                checkAnswer(false);
-                cycleQuestion();
+                setState(() {
+                  print(quizBrain.checkAnswer(false));
+                  quizBrain.cycleQuestion();
+                });
               },
             ),
           ),
