@@ -33,6 +33,25 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
+  void addIcon(bool answerIsCorrect) {
+    setState(() {
+      if (quizBrain.checkAnswer(answerIsCorrect)) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.add_alert,
+          color: Colors.red,
+        ));
+      }
+      if (quizBrain.currentQuestion == 0) {
+        scoreKeeper.clear();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -69,10 +88,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  print(quizBrain.checkAnswer(true));
-                  quizBrain.cycleQuestion();
-                });
+                addIcon(true);
               },
             ),
           ),
@@ -90,15 +106,12 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  print(quizBrain.checkAnswer(false));
-                  quizBrain.cycleQuestion();
-                });
+                addIcon(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(children: scoreKeeper)
       ],
     );
   }

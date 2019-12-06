@@ -39,10 +39,13 @@ class QuizBrain {
   }
 
   bool checkAnswer(bool answer) {
-    if (questions[currentQuestion].answer == answer)
+    if (questions[currentQuestion].answer == answer) {
+      cycleQuestion();
       return true;
-    else
+    } else {
+      cycleQuestion();
       return false;
+    }
   }
 
   String getQuestion(int questionNumber) {
