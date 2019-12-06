@@ -33,6 +33,33 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
+  Future<void> _neverSatisfied() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Game completed!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Press OK to restart.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void addIcon(bool answerIsCorrect) {
     setState(() {
       if (quizBrain.checkAnswer(answerIsCorrect)) {
@@ -48,6 +75,7 @@ class _QuizPageState extends State<QuizPage> {
       }
       if (quizBrain.currentQuestion == 0) {
         scoreKeeper.clear();
+        _neverSatisfied();
       }
     });
   }
